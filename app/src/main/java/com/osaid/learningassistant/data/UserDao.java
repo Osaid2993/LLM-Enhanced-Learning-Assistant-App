@@ -1,0 +1,25 @@
+package com.osaid.learningassistant.data;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
+@Dao
+public interface UserDao {
+
+    @Insert
+    long insert(User user);
+
+    @Update
+    void update(User user);
+
+    @Query("SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1")
+    User login(String username, String password);
+
+    @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
+    User findByUsername(String username);
+
+    @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
+    User findById(int id);
+}
