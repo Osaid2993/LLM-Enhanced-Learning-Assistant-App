@@ -30,4 +30,24 @@
 
     <string name="results_title">Your Results</string>
     <string name="loading">Loading…</string>
+
+    <string name="profile_title">Profile</string>
+    <string name="history_title">History</string>
+    <string name="upgrade_title">Upgrade</string>
+    <string name="upgrade_subtitle">your experience</string>
+    <string name="btn_share">Share</string>
+    <string name="btn_history">History</string>
+    <string name="btn_upgrade">Upgrade</string>
+    <string name="btn_purchase">Purchase</string>
+    <string name="tier_starter">Starter</string>
+    <string name="tier_intermediate">Intermediate</string>
+    <string name="tier_advanced">Advanced</string>
+    <string name="tier_description">Improved Quiz generation</string>
+    <string name="best_seller">Best Seller</string>
+    <string name="notification_placeholder">Display any important notifications here</string>
+    <string name="summarize_label">Summarized by AI</string>
+    <string name="summarize_description">Query the LLM to get a summary for your incorrect answers</string>
+    <string name="history_empty">No quiz history yet. Complete a quiz to see your results here.</string>
+    <string name="payment_method">Visa •••• 4242</string>
+    <string name="payment_success">Payment successful! %1$s activated.</string>
 </resources>

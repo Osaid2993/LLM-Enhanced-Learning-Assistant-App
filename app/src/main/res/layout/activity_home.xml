@@ -41,9 +41,12 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/profileButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/bg_profile_circle">
+            android:background="@drawable/bg_profile_circle"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="26dp"

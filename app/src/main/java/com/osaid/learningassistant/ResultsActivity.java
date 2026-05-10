@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.osaid.learningassistant.data.AppDatabase;
+import com.osaid.learningassistant.data.QuizHistory;
+import com.osaid.learningassistant.data.SessionManager;
 import com.osaid.learningassistant.databinding.ActivityResultsBinding;
 import com.osaid.learningassistant.network.ApiClient;
 import com.osaid.learningassistant.network.ApiService;
@@ -41,10 +43,12 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityResultsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.getRoot().startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fade_slide_in));
 
         Intent incoming = getIntent();
         String questionsJson = incoming.getStringExtra("questions_json");
         String userAnswersJson = incoming.getStringExtra("user_answers_json");
+        String topic = incoming.getStringExtra("task_topic");
 
         Gson gson = new Gson();
         Type questionsType = new TypeToken<List<QuizResponse.Question>>() {}.getType();
@@ -68,6 +72,8 @@ public class ResultsActivity extends AppCompatActivity {
         }
         binding.scoreText.setText("You scored " + correctCount + " out of " + questions.size());
 
+        saveQuizHistory(topic, gson);
+
         ResultsAdapter adapter = new ResultsAdapter(questions, userAnswers);
         binding.resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.resultsRecycler.setAdapter(adapter);
@@ -81,6 +87,31 @@ public class ResultsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void saveQuizHistory(String topic, Gson gson) {
+        SessionManager session = new SessionManager(this);
+        int userId = session.getUserId();
+        if (userId == -1) return;
+
+        AppDatabase db = AppDatabase.getInstance(this);
+        long now = System.currentTimeMillis();
+
+        for (int i = 0; i < questions.size(); i++) {
+            QuizResponse.Question q = questions.get(i);
+            String userAns = userAnswers.get(i).trim().toUpperCase();
+            String correctAns = q.correct_answer.trim().toUpperCase();
+            boolean isCorrect = correctAns.equals(userAns);
+
+            String optionsJson = gson.toJson(q.options);
+            String safeTopic = (topic != null) ? topic : "General";
+
+            QuizHistory entry = new QuizHistory(
+                    userId, safeTopic, q.question, optionsJson,
+                    userAns, correctAns, isCorrect, now
+            );
+            db.quizHistoryDao().insert(entry);
+        }
     }
 
     static class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolder> {

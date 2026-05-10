@@ -19,6 +19,9 @@ public interface ApiService {
     @POST("explainAnswer")
     Call<ExplanationResponse> explainAnswer(@Body ExplanationRequest request);
 
+    @POST("summarize")
+    Call<SummaryResponse> getSummary(@Body SummaryRequest request);
+
     class HintRequest {
         public String question;
         public List<String> options;
@@ -40,6 +43,14 @@ public interface ApiService {
             this.options = options;
             this.correct_answer = correct_answer;
             this.user_answer = user_answer;
+        }
+    }
+
+    class SummaryRequest {
+        public String questions;
+
+        public SummaryRequest(String questions) {
+            this.questions = questions;
         }
     }
 }

@@ -2,6 +2,7 @@ package com.osaid.learningassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +51,13 @@ public class HomeActivity extends AppCompatActivity {
         binding.userNameText.setText(user.username);
         generateTasksFromInterests(user.interests);
         binding.tasksDueText.setText(getString(R.string.tasks_due, tasks.size()));
+
+        binding.profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+            }
+        });
 
         TaskAdapter adapter = new TaskAdapter(tasks, new TaskAdapter.OnTaskClickListener() {
             @Override

@@ -78,6 +78,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                     expandedPositions.remove(pos);
                     animateCollapse(holder.questionBody);
                     holder.expandArrow.animate().rotation(0f).setDuration(200).start();
+
                 } else {
                     expandedPositions.add(pos);
                     animateExpand(holder.questionBody);

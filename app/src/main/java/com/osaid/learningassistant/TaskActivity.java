@@ -118,6 +118,7 @@ public class TaskActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ResultsActivity.class);
         intent.putExtra("questions_json", questionsJson);
         intent.putExtra("user_answers_json", userAnswersJson);
+        intent.putExtra("task_topic", taskTopic);
         startActivity(intent);
     }
 
