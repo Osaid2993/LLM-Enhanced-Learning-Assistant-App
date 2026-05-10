@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 import re
 from groq import Groq
 
-os.environ['GROQ_API_KEY'] = 'YOUR_KEY_HERE'
+os.environ['GROQ_API_KEY'] = 'YOUR_GROQ_API_KEY'
 
 app = Flask(__name__)
 
@@ -170,6 +170,32 @@ def explain_answer():
 def run_test():
     return jsonify({'quiz': "test"}), 200
 
+def fetchSummaryFromLlama(questions_text):
+    print("Fetching summary from llama")
+    query = (
+        f"A student got the following questions wrong in their quizzes. "
+        f"Give a brief, encouraging summary of the areas they need to improve on. "
+        f"Group similar topics together if possible. "
+        f"Keep it to 3 to 5 sentences. Be specific about what concepts they should review. "
+        f"Only output the summary text, nothing else.\n\n"
+        f"{questions_text}"
+    )
+    response = askLlama(query, max_tokens=300)
+    print(response)
+    return response.strip()
+
+
+@app.route('/summarize', methods=['POST'])
+def summarize():
+    print("Summary request received")
+    body = request.get_json(silent=True) or {}
+    questions_text = body.get('questions')
+
+    if not questions_text:
+        return jsonify({'error': 'Missing questions parameter'}), 400
+
+    summary = fetchSummaryFromLlama(questions_text)
+    return jsonify({'summary': summary}), 200
 
 if __name__ == '__main__':
     port_num = 5000
